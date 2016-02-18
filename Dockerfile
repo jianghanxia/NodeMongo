@@ -1,21 +1,22 @@
-FROM ubuntu:14.04
-MAINTAINER jianghanxia <jianghanxia@qq.com>
+# About NodeJS&MongoDB of Docker
+# Version:1.0.0
 
-#RUN sed -e "s/\/archive.ubuntu.com/\/cn.archive.ubuntu.com/g" --in-place /etc/apt/sources.list
-    
-RUN apt-get update && apt-get -y upgrade && apt-get -y install curl
+FROM centos:7
+MAINTAINER Zorc <939225037@qq.com>
 
-#install Node.JS
-RUN curl -sL https://deb.nodesource.com/setup_5.x | sudo -E bash - && apt-get install -y nodejs
+RUN yum -y update; yum clean all
 
-#install MongoDB
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927 \
-  && echo 'deb http://repo.mongodb.org/apt/ubuntu precise/mongodb-org/3.2 multiverse' | tee /etc/apt/sources.list.d/mongodb-org-3.2.list \
-  && apt-get update && apt-get upgrade -y && apt-get install -y mongodb-org
+# install the epel
+RUN yum -y install epel-release; yum clean all
 
-#Clean
-RUN rm -rf /var/lib/apt/lists/*
+# install the nodejs and npm
+RUN yum -y install nodejs npm; yum clean all
 
-VOLUME ["/data/db"]
+# install the MongoDB
+RUN yum -y install mongodb-org; chkconfig mongod on; yum clean all
 
-ENTRYPOINT ["/bin/bash"]
+ADD . /src
+
+EXPOSE 3000,27017
+
+CMD ["node", "/src/bin/www"]
