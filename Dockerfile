@@ -17,6 +17,7 @@ RUN yum -y install mongodb-org; chkconfig mongod on; yum clean all
 
 ADD . /src
 
-EXPOSE 3000,27017
+EXPOSE 3000
+EXPOSE 27017
 
 CMD ["node", "/src/bin/www"]
